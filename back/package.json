@@ -1,0 +1,28 @@
+{
+  "name": "qr_code",
+  "version": "1.0.0",
+  "description": "this is a backed for the telegram bot",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "author": "solo",
+  "license": "MIT",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1130.0",
+    "better-sqlite3": "^13.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "multer": "^2.3.0",
+    "qrcode": "^1.5.4",
+    "telegraf": "^4.16.3",
+    "uuid": "^14.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
