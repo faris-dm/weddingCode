@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 
 /**
- * Mock API Layer (Simulates src/api.js)
- * Implements realistic network latency, return shapes, and optional simulated failures.
+//  * Mock API Layer (Simulates src/api.js)
+//  * Implements realistic network latency, return shapes, and optional simulated failures.
  */
 // const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -66,6 +66,9 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 //     id: `rec_${Math.random().toString(36).substr(2, 9)}`,
 //   };
 // }
+
+
+// above is for the moc app
 
       const API_BASE_URL = "http://localhost:2400/api"; // change this later to your real deployed backend URL
 
