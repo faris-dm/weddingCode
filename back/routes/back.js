@@ -1,13 +1,12 @@
 import express from "express";
 import multer from "multer";
 
-import { getChatIdFromEventId, saveVideo } from "../model/db.js"
-import bot from "../bot.js"
+import { getChatIdFromEventId, saveVideo } from "../model/db.js";
+import bot from "../bot.js";
 
 import "dotenv/config";
 const app = express.Router();
 app.use(express.json());
-
 
 app.get("/test", (req, res) => {
   return res.status(200).send("wedding QR is working correctly");
@@ -26,12 +25,16 @@ app.get("/test", (req, res) => {
 //   },
 // });
 
-
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 70 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
-    if (!file.mimetype.startsWith("video/") && !file.mimetype.startsWith("audio/")) {
+    const allowedTypes = ["video/", "audio/", "application/octet-stream"];
+    const isAllowed = allowedTypes.some((type) =>
+      file.mimetype.startsWith(type)
+    );
+
+    if (!isAllowed) {
       return cb(new Error("Invalid file type"));
     }
     cb(null, true);
@@ -40,7 +43,7 @@ const upload = multer({
 
 app.get("/event/:eventId", async (req, res) => {
   const { eventId } = req.params;
-  const chatId =  await getChatIdFromEventId(eventId);
+  const chatId = await getChatIdFromEventId(eventId);
 
   if (!chatId) {
     return res.status(404).json({ valid: false, message: "Event not found" });
@@ -75,5 +78,12 @@ app.post("/upload", upload.single("video"), async (req, res) => {
     console.error(err);
     res.status(500).json({ success: false, message: "Something went wrong" });
   }
+});
+
+app.use((err, req, res, next) => {
+  console.error(err);
+  res
+    .status(400)
+    .json({ success: false, message: err.message || "Upload failed" });
 });
 export default app;
