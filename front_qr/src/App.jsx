@@ -70,7 +70,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 
 // above is for the moc app
 
-      const API_BASE_URL = "http://localhost:2400/api"; // change this later to your real deployed backend URL
+      const API_BASE_URL = "https://weddingcode-q3e5.onrender.com/api"; // change this later to your real deployed backend URL
 
       export async function validateEvent(eventId) {
         try {
