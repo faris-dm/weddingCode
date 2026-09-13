@@ -2,13 +2,14 @@ import QRCode from "qrcode";
 import "dotenv/config";
 import { v4 } from "uuid";
 import { Telegraf } from "telegraf";
-
+import { saveEvent, getChatIdFromEventId } from  "./model/db.js"
 const bot = new Telegraf(process.env.Bot_Token);
 
 bot.start(async (ctx) => {
   const chatId = ctx.chat.id;
 
   const eventId = v4();
+    await saveEvent(eventId, chatId);
 
   const Link = `https://frontqr.vercel.app/?event=${eventId}`;
   const qrCode = await QRCode.toDataURL(Link);
