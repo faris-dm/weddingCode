@@ -29,6 +29,8 @@ const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 70 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
+    console.log("Incoming file mimetype:", file.mimetype); // ← temporary debug line
+
     const allowedTypes = ["video/", "audio/", "application/octet-stream"];
     const isAllowed = allowedTypes.some((type) =>
       file.mimetype.startsWith(type)
