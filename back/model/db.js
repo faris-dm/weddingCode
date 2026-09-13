@@ -19,7 +19,7 @@ async function saveEvent(eventId, chatId) {
 }
 
 async function getChatIdFromEventId(eventId) {
-  const result = await pool.query(
+  const result = await Pool.query(
     "SELECT chat_id FROM events WHERE event_id = $1",
     [eventId]
   );
