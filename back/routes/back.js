@@ -15,8 +15,20 @@ app.get("/test", (req, res) => {
 // solo
 
 //  this upload is where thes data  are sent
+// const upload = multer({
+//   dest: "uploads/",
+//   limits: { fileSize: 70 * 1024 * 1024 },
+//   fileFilter: (req, file, cb) => {
+//     if (!file.mimetype.startsWith("video/") && !file.mimetype.startsWith("audio/")) {
+//       return cb(new Error("Invalid file type"));
+//     }
+//     cb(null, true);
+//   },
+// });
+
+
 const upload = multer({
-  dest: "uploads/",
+  storage: multer.memoryStorage(),
   limits: { fileSize: 70 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     if (!file.mimetype.startsWith("video/") && !file.mimetype.startsWith("audio/")) {
@@ -42,7 +54,9 @@ app.post("/upload", upload.single("video"), async (req, res) => {
     const videoFile = req.file;
 
     if (!eventId || !videoFile) {
-      return res.status(400).json({ success: false, message: "Missing eventId or video" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Missing eventId or video" });
     }
 
     const chatId = await getChatIdFromEventId(eventId);
@@ -50,18 +64,10 @@ app.post("/upload", upload.single("video"), async (req, res) => {
       return res.status(404).json({ success: false, message: "Invalid event" });
     }
 
-    const videoId = await saveVideo(eventId, videoFile.path);
-
-    await bot.telegram.sendMessage(chatId, "🎥 You have a new video message!", {
-      reply_markup: {
-        inline_keyboard: [
-          [
-            { text: "View", callback_data: `view_${videoId}` },
-            { text: "Later", callback_data: `later_${videoId}` },
-            { text: "Dismiss", callback_data: `dismiss_${videoId}` },
-          ],
-        ],
-      },
+    // Send the video/audio buffer directly to the couple, right now
+    await bot.telegram.sendVideo(chatId, {
+      source: videoFile.buffer,
+      filename: "message.webm",
     });
 
     res.json({ success: true, message: "Video sent!" });
