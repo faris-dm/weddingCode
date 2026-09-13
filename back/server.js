@@ -4,14 +4,15 @@ import path from "./routes/back.js";
 import "dotenv/config";
 const app = express();
 import cors from "cors";
-
-app.use(express.json());
-app.use("/api", path);
 app.use(
   cors({
     origin: "https://frontqr.vercel.app",
   })
 );
+
+app.use(express.json());
+app.use("/api", path);
+
 
 app.get("/main", (req, res) => {
   return res.status(200).json("it is working");
