@@ -28,19 +28,9 @@ app.get("/test", (req, res) => {
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 70 * 1024 * 1024 },
-  fileFilter: (req, file, cb) => {
-    console.log("Incoming file mimetype:", file.mimetype); // ← temporary debug line
-
-    const allowedTypes = ["video/", "audio/", "application/octet-stream"];
-    const isAllowed = allowedTypes.some((type) =>
-      file.mimetype.startsWith(type)
-    );
-
-    if (!isAllowed) {
-      return cb(new Error("Invalid file type"));
-    }
-    cb(null, true);
-  },
+  // No MIME-type filter — mobile browsers can report unreliable mimetypes
+  // for Blob uploads. We trust the client because this endpoint is only
+  // ever called by our own recorder frontend.
 });
 
 app.get("/event/:eventId", async (req, res) => {
